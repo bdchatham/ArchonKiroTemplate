@@ -69,37 +69,240 @@ This stable structure ensures RAG agents can reliably retrieve information acros
 
 When auditing or updating documentation, follow this systematic workflow to ensure accuracy and completeness:
 
-### Step 1: Understand the System
-Before making any documentation changes, build a complete mental model:
-- **Scan the codebase**: Review source files to understand actual behavior
-- **Review infrastructure**: Check deployment configs, CDK stacks, Terraform files
-- **Read existing docs**: Understand what's already documented in `.kiro/docs/`
-- **Identify gaps**: Note what's missing, outdated, or unclear
+### Step 1: Deep Dive - Build Complete Mental Model
 
-### Step 2: Audit Documentation
-Systematically evaluate the current state:
-- **Identify gaps**: What behavior exists in code but isn't documented?
-- **Find stale content**: What documentation no longer matches the code?
-- **Detect oversized sections**: Which sections exceed ~1000 tokens and need refactoring?
-- **Check provenance**: Are all significant sections grounded with "Source" references?
-- **Verify consistency**: Does terminology match across all 6 core files?
+**CRITICAL: Read EVERY relevant file before making changes.** Superficial understanding leads to incomplete or inaccurate documentation.
 
-### Step 3: Plan Before Rewriting
+**Systematic code exploration:**
+- **Read all source files**: Don't just grep - understand the actual implementation
+- **Check all configuration files**: Deployment configs, Kustomize, Helm charts, CDK/Terraform
+- **Trace data flows**: Follow how data moves through the system
+- **Identify all dependencies**: External services, libraries, APIs
+- **Check version numbers**: In go.mod, package.json, requirements.txt, Docker images, Kustomize resources
+- **Review recent commits**: Understand what changed recently
+
+**Build exhaustive mental model:**
+- What components exist and how do they interact?
+- What are the actual deployed versions (not assumptions)?
+- What resources are provisioned automatically?
+- What are the complete provisioning steps (in order)?
+- What lifecycle hooks exist (creation, update, deletion)?
+- What are the actual namespace names, service names, URLs?
+
+**Use thinking tool for complex systems:**
+```
+I need to understand:
+1. Complete component list
+2. All provisioning steps
+3. All version numbers
+4. All namespace/resource names
+5. Cross-component dependencies
+6. Lifecycle management
+```
+
+### Step 2: Systematic Audit - Find ALL Inaccuracies
+
+**Check EVERY occurrence across ALL 6 files:**
+- **Version numbers**: Search for version patterns (v\d+\.\d+\.\d+) and verify each one
+- **Namespace names**: Check all namespace references match actual code
+- **Component names**: Verify naming consistency across all files
+- **URLs and endpoints**: Check all URLs are accurate
+- **Provisioning steps**: Verify the complete sequence matches controller code
+- **Status fields**: Check CRD status fields match actual types
+
+**Systematic verification checklist:**
+- [ ] All version numbers verified against actual deployments
+- [ ] All namespace names match code
+- [ ] All component names consistent across 6 files
+- [ ] All URLs and endpoints accurate
+- [ ] All provisioning steps documented in order
+- [ ] All status fields match CRD definitions
+- [ ] All configuration examples match actual configs
+- [ ] All "Source" references point to real files
+
+**Common inaccuracy patterns to check:**
+- Outdated version numbers (check actual deployed versions)
+- Incorrect namespace names (check actual Kubernetes resources)
+- Missing components (check if new components were added)
+- Incomplete provisioning steps (check controller reconciliation logic)
+- Stale configuration examples (check actual ConfigMaps/Secrets)
+
+### Step 3: Cross-File Consistency Check
+
+**MANDATORY: Check ALL 6 files for every change.**
+
+When you find an inaccuracy or add new content, systematically check:
+
+1. **Identify scope**: What components, APIs, or data models are affected?
+2. **List all 6 files**: Which files might reference this?
+3. **Search each file**: Use grep/search to find all occurrences
+4. **Update ALL occurrences**: Don't leave any file with stale information
+5. **Verify terminology**: Same terms used everywhere
+
+**Cross-file update matrix:**
+
+| Change Type | Files to Update |
+|-------------|-----------------|
+| New component | overview.md, architecture.md, operations.md, api.md (if has API), data-models.md (if has data), faq.md |
+| Version change | Search ALL 6 files for version number |
+| New API endpoint | api.md, architecture.md, data-models.md, operations.md (verification), faq.md (if common question) |
+| Schema change | data-models.md, api.md, architecture.md (if affects flow) |
+| New provisioning step | architecture.md, operations.md, data-models.md (status fields) |
+| Namespace change | Search ALL 6 files for old namespace name |
+
+**Verification prompts after updates:**
+- "Have I checked ALL 6 files for references to what I just changed?"
+- "Are version numbers consistent across all files?"
+- "Are component names identical in all files?"
+- "Would a RAG agent get the same information from any file?"
+
+### Step 4: Plan Before Rewriting
+
 Never start rewriting immediately. Instead:
 - **Propose changes as a bullet list**: Outline what you'll add, update, or remove
-- **Identify affected files**: List all `.kiro/docs/*.md` files that need updates
+- **Identify ALL affected files**: List all `.kiro/docs/*.md` files that need updates
+- **Show cross-file impact**: Explain which files need updates and why
 - **Get user confirmation**: Present the plan and wait for approval
 - **Prioritize**: Focus on high-impact changes first
 
-### Step 4: Implement Incrementally
-Execute the plan in small, focused updates:
-- **One section at a time**: Make discrete, reviewable changes
-- **Update related files together**: If a change affects multiple files, update them in the same commit
+**Example plan format:**
+```
+Found inaccuracies:
+1. Tekton Triggers version: v0.29.0 → v0.34.0
+   - Affects: architecture.md (4 occurrences), operations.md (1), faq.md (1)
+2. Missing External Secrets Operator component
+   - Affects: overview.md, architecture.md, operations.md, api.md, data-models.md, faq.md
+
+Plan:
+1. Fix all Tekton Triggers version references (6 total across 3 files)
+2. Add External Secrets Operator to all 6 files:
+   - overview.md: Add to component list
+   - architecture.md: Add as new component with provisioning details
+   - operations.md: Add verification steps
+   - api.md: Add ClusterSecretStore and ExternalSecret APIs
+   - data-models.md: Add schemas
+   - faq.md: Add usage FAQ
+```
+
+### Step 5: Implement with Exhaustive Coverage
+
+Execute the plan with complete thoroughness:
+- **Update ALL affected files in same commit**: Keep related changes together
 - **Add provenance immediately**: Include "Source" references as you write
 - **Verify as you go**: Check that each update maintains RAG-friendly structure
-- **Remove stale content**: Delete outdated information rather than adding alongside it
+- **Remove stale content**: Delete outdated information completely
+- **Check cross-references**: Update links between files
 
-**Key Principle**: Incremental, grounded updates are always better than large, speculative rewrites.
+**Commit message format:**
+```
+docs(scope): brief description
+
+- Detailed change 1 with affected files
+- Detailed change 2 with affected files
+- Add source references to actual code
+- Verify cross-file consistency
+```
+
+**Key Principle**: Exhaustive, grounded updates across ALL files are better than partial updates that leave inconsistencies.
+
+---
+
+**Key Principle**: Exhaustive, grounded updates across ALL files are better than partial updates that leave inconsistencies.
+
+---
+
+## Version Accuracy Verification
+
+**CRITICAL: Version numbers must match actual deployed components.** Inaccurate versions mislead users and RAG agents.
+
+### Systematic Version Checking
+
+**Before documenting any component, verify its actual version:**
+
+1. **Check deployment manifests**:
+   ```bash
+   # Kubernetes manifests
+   grep -r "image:" manifests/
+   grep -r "version:" kustomization.yaml
+   
+   # Helm charts
+   grep "version:" Chart.yaml
+   grep "appVersion:" Chart.yaml
+   
+   # Docker Compose
+   grep "image:" docker-compose.yml
+   ```
+
+2. **Check package managers**:
+   ```bash
+   # Go
+   grep "go " go.mod
+   grep "github.com/" go.mod
+   
+   # Python
+   grep "==" requirements.txt
+   cat pyproject.toml
+   
+   # Node.js
+   grep "\"version\"" package.json
+   cat package-lock.json
+   ```
+
+3. **Check infrastructure as code**:
+   ```bash
+   # CDK/Terraform
+   grep "version" *.ts *.tf
+   
+   # Kustomize remote resources
+   grep "github.com.*releases" kustomization.yaml
+   ```
+
+4. **Check running cluster** (if accessible):
+   ```bash
+   # Get actual image versions
+   kubectl get pods -A -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[*].image}{"\n"}'
+   
+   # Get CRD versions
+   kubectl get crd -o custom-columns=NAME:.metadata.name,VERSION:.spec.versions[*].name
+   ```
+
+### Common Version Inaccuracy Patterns
+
+**Watch for these common mistakes:**
+
+1. **Outdated version numbers**: Documentation shows v1.0.0 but code uses v2.0.0
+2. **Inconsistent versions across files**: architecture.md shows v1.0.0, operations.md shows v1.1.0
+3. **Missing version numbers**: "Latest version" instead of specific version
+4. **Wrong version format**: "v1.0" instead of "v1.0.0"
+5. **Assumed versions**: Guessing version instead of checking actual deployment
+
+### Version Update Checklist
+
+When updating version numbers:
+
+- [ ] Verified actual deployed version (not assumed)
+- [ ] Searched ALL 6 files for old version number
+- [ ] Updated ALL occurrences of version number
+- [ ] Checked related version numbers (e.g., if updating Tekton Pipelines, check Tekton Triggers)
+- [ ] Updated version in examples and code snippets
+- [ ] Verified version format is consistent (e.g., all use "v1.0.0" not mix of "v1.0.0" and "1.0.0")
+- [ ] Added source reference to where version is defined
+
+### Version Documentation Best Practices
+
+**Do:**
+- Always include specific version numbers (v1.2.3)
+- Check actual deployed versions before documenting
+- Update all occurrences across all 6 files
+- Add source references to version definitions
+- Use consistent version format
+
+**Don't:**
+- Use "latest" or "current version" without specifics
+- Assume version numbers without verification
+- Leave old version numbers in any file
+- Mix version formats (v1.0.0 vs 1.0.0)
+- Document versions from memory or assumptions
 
 ---
 
