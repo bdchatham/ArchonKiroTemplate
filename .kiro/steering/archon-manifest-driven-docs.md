@@ -151,7 +151,7 @@ If anything is unclear:
 
 ### Step 2: Documentation with Provenance
 
-After understanding the code, create documentation following the 6-file structure from `archon-docs.md`.
+After understanding the code, create documentation following the 7-file structure from `archon-docs.md`.
 
 #### 2.1 Get Documentation Template
 
@@ -164,7 +164,7 @@ Input: { "package_name": "PackageName", "file_name": "architecture.md" }
 
 #### 2.2 Write Documentation with Provenance
 
-For each of the 6 core documentation files, write content that:
+For each of the 7 core documentation files, write content that:
 
 1. **Is grounded in code you read** - Every claim must be verifiable
 2. **Includes Source references** - Point to specific files for each section
@@ -375,7 +375,7 @@ If the user identifies issues:
 
 ## Documentation Structure Reference
 
-Follow the 6-file structure defined in `archon-docs.md`:
+Follow the 7-file structure defined in `archon-docs.md`:
 
 | File | Purpose |
 |------|---------|
@@ -384,6 +384,7 @@ Follow the 6-file structure defined in `archon-docs.md`:
 | `operations.md` | Deployment, monitoring, runbooks |
 | `api.md` | API contracts and interfaces |
 | `data-models.md` | Data structures and schemas |
+| `integrations.md` | Cross-package dependencies and integration patterns |
 | `faq.md` | Common questions and answers |
 
 **Never create additional documentation files.** Add new content as sections within the appropriate existing file.

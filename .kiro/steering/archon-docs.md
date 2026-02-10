@@ -21,19 +21,21 @@ Ensure the following structure exists:
 - `.kiro/docs/operations.md` - Deployment, monitoring, runbooks
 - `.kiro/docs/api.md` - API contracts and interfaces
 - `.kiro/docs/data-models.md` - Data structures and schemas
+- `.kiro/docs/integrations.md` - Cross-package dependencies and integration patterns
 - `.kiro/docs/faq.md` - Common questions and answers
 
-**CRITICAL: These 6 files are the complete, stable documentation structure.**
+**CRITICAL: These 7 files are the complete, stable documentation structure.**
 
 - **Never create additional documentation files** for new features or components
 - **Always add new content as sections** within the appropriate existing file
-- **Enforce the 6-file limit** during all documentation updates
+- **Enforce the 7-file limit** during all documentation updates
 - If unsure where new content belongs, use this guidance:
   - High-level concepts and purpose → `overview.md`
   - System design, components, data flow → `architecture.md`
   - Deployment, monitoring, troubleshooting → `operations.md`
   - API endpoints, interfaces, contracts → `api.md`
   - Data structures, schemas, storage → `data-models.md`
+  - Cross-package APIs, shared types, config coordination → `integrations.md`
   - Common questions, gotchas, tips → `faq.md`
 
 This stable structure ensures RAG agents can reliably retrieve information across repository updates.

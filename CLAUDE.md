@@ -12,19 +12,20 @@ Archon ingests all Markdown files under `.kiro/docs/` from this public GitHub re
 
 The documentation structure is **intentionally stable** to ensure reliable RAG retrieval across repository updates.
 
-**Core Principle: Exactly 6 Documentation Files**
+**Core Principle: Exactly 7 Documentation Files**
 
-This repository maintains exactly **6 core documentation files** under `.kiro/docs/`:
-1. `overview.md`
-2. `architecture.md`
-3. `operations.md`
-4. `api.md`
-5. `data-models.md`
-6. `faq.md`
+This repository maintains exactly **7 core documentation files** under `.kiro/docs/`:
+1. `overview.md` - High-level purpose and context
+2. `architecture.md` - System design and components
+3. `operations.md` - Deployment, monitoring, runbooks
+4. `api.md` - API contracts and interfaces
+5. `data-models.md` - Data structures and schemas
+6. `integrations.md` - Cross-package dependencies and integration patterns
+7. `faq.md` - Common questions and answers
 
 **Prohibition on New Files**
 
-Do **NOT** create additional documentation files for new features, components, or capabilities. The 6-file structure is fixed and must remain stable.
+Do **NOT** create additional documentation files for new features, components, or capabilities. The 7-file structure is fixed and must remain stable.
 
 **Where to Document New Features**
 
@@ -37,6 +38,7 @@ Examples:
 - New component → Add section to `architecture.md`, update `operations.md` for deployment
 - New API endpoint → Add section to `api.md`, potentially update `architecture.md`
 - New data schema → Add section to `data-models.md`, potentially update `architecture.md`
+- Cross-package API → Add section to `integrations.md`, update `api.md` for contract details
 
 **Rationale**
 
@@ -64,6 +66,9 @@ API contracts, interfaces, endpoints, and integration patterns. Documents how ot
 
 ### `.kiro/docs/data-models.md`
 Data structures, schemas, database models, and data flow. Describes what data this system manages and how.
+
+### `.kiro/docs/integrations.md`
+Cross-package dependencies, shared types, API contracts between packages, and configuration coordination. Documents how this package integrates with other packages in the workspace.
 
 ### `.kiro/docs/faq.md`
 Common questions, gotchas, and quick answers. Helps new contributors and operators get up to speed.
